@@ -18,7 +18,7 @@ These games were tested on Linux: a Retroid Pocket Flip 2 (Snapdragon 865, Adren
 | ![Hollow Knight: Silksong](docs/images/hollow-knight-silksong.jpg)<br>Hollow Knight: Silksong<br><sub>`v0.3.0` · Retroid Pocket Flip 2 (ROCKNIX)</sub> | ![Hades II](docs/images/hades-ii.jpg)<br>Hades II<br><sub>`v0.3.0` · Retroid Pocket Flip 2 (ROCKNIX)</sub> |
 | Hollow Knight<br><sub>`v0.3.0` · Retroid Pocket Flip 2 (ROCKNIX)</sub> | |
 
-<!-- Games played on Android but not tested on Linux yet; hidden until they are.
+<!-- Not tested on Linux yet; hidden until they are.
 
 | | |
 |:---:|:---:|
