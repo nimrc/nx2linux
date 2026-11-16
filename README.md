@@ -1,13 +1,15 @@
 <h1 align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo-dark.svg">
-    <img alt="nx2android" src="docs/images/logo.svg" height="140">
+    <img alt="nx2penguin" src="docs/images/logo.svg" height="140">
   </picture>
 </h1>
 
-Port your own Nintendo Switch games to Android, natively: the game's own arm64 code runs on the device, with the Switch's system services stood in for by a host and NVN graphics replayed on Vulkan. Pick the game's folder, click **Port**, and get an APK plus the game's data, installed on your device if you like. Bring your own game files and keys; nothing from any game is in this repository.
+# nx2penguin
 
-This is the Android port of [nxnative](https://github.com/seedds/nxnative), which does the same on iPhone and iPad. Supported games: [Games](#games).
+Turn your own Nintendo Switch games into native Linux (aarch64) ports: the game's own arm64 code runs on the device with the Switch's system services stood in for by a host, NVN graphics replayed on Vulkan. Bring your own game files and keys; nothing from any game is in this repository.
+
+nx2penguin is the Linux host project: it takes a porter's data pack (the same pack the Android pipeline makes), builds a per-game `dmhost` for Linux, and runs it on an Adreno GPU through Mesa's Turnip driver. The porter, the NVN→Vulkan replay backend, and the game profiles come from the community projects credited at the end; this project keeps them working together on Linux (dma-buf zero-copy pools, guest memory below 2³⁹, FFmpeg movie decode).
 
 ## Games
 
@@ -53,13 +55,13 @@ These games were tested on Linux: a Retroid Pocket Flip 2 (Snapdragon 865, Adren
 | ![Xenoblade Chronicles 3](docs/images/xenoblade-chronicles-3.jpg)<br>Xenoblade Chronicles 3<br><sub>`v0.1.0` · update 2.2.0 · 30 fps · **work in progress**: some effects and models don't draw yet</sub> | ![Xenoblade Chronicles: Definitive Edition](docs/images/xenoblade-chronicles-definitive-edition.jpg)<br>Xenoblade Chronicles: Definitive Edition<br><sub>`v0.4.0` · update 2.0.0 · 30 fps · tested on the AYN Odin 2 with a Turnip driver · **tested to Colony 9**, the pause menu and saving: later maps not checked yet · the scene drops to 896x504 in heavy fights · rarely crashes at boot (restart)</sub> |
 -->
 
-The tag (`v0.1.3`) is the latest nx2android version the game was tested on. Older games are not tested again for each release: if a later version breaks one, a patch release fixes it. A tag newer than the [latest release](https://github.com/shirai91/nx2android/releases/latest) is the next release, and the game needs the development checkout until it ships.
+The tag (`v0.1.3`) is the latest version of the upstream pipeline the game was tested on. Older games are not tested again for each release: if a later version breaks one, a later fix restores it.
 
 A game that is not in this table is not supported yet. The games we look at next, and the ones done: [docs/PORT_CHECKLIST.md](docs/PORT_CHECKLIST.md).
 
 ## For players: port a game without programming
 
-1. Download `nx2android-<version>-windows-x64.zip` (Windows), `nx2android-<version>-macos-arm64.zip` (Mac with Apple silicon), `nx2android-<version>-linux-x64.zip` (Linux on a PC) or `nx2android-<version>-linux-arm64.zip` (Linux on ARM) from [Releases](https://github.com/shirai91/nx2android/releases/latest), unzip it and start **nx2android** (on a Mac, see [packaging/INSTALL.md](packaging/INSTALL.md#1-start-the-app) first).
+1. Download the porter's bundle (`nx2android-<version>-windows-x64.zip`, `-macos-arm64.zip`, `-linux-x64.zip` or `-linux-arm64.zip`; the filename keeps its upstream spelling) from the upstream [Releases](https://github.com/shirai91/nx2android/releases/latest), unzip it and start the tool.
 2. **Setup** tab: click **Download missing tools** (the Android NDK, the .NET SDK and platform-tools, about 1 GB, from Google and Microsoft), then set your **prod.keys**. Every line turns green.
 3. **Port** tab: choose the folder with the game's NSP, XCI, NSZ or XCZ files (base game, update, DLC) and click **Port**.
 4. Tick **Install on the device when done** with the device plugged in and USB debugging on, or copy the APK and the data folder yourself.
@@ -104,10 +106,19 @@ Running from the repository, the command line, the repository layout, building t
 
 ## Keys and game files
 
-nx2android decrypts your game files with your `prod.keys` while it ports them, as Switch emulators do. This repository and its releases contain no keys, no game files and nothing extracted from them, and the tool never downloads either. Dump both from your own Switch, and don't share them or the APKs and data packs built from them.
+This project decrypts your game files with your `prod.keys` while it ports them, as Switch emulators do. This repository and its releases contain no keys, no game files and nothing extracted from them, and the tool never downloads either. Dump both from your own Switch, and don't share them or the data packs built from them.
 
 Nintendo's takedown notices so far have gone to whoever hosts a project (13 Switch emulator repositories on GitHub in February 2026), not to players. Whether decrypting your own games for your own use is allowed depends on where you live.
 
+## Credits
+
+nx2penguin stands on other people's open-source work (full list in [PROVENANCE.md](PROVENANCE.md)):
+
+- [shirai91/nx2android](https://github.com/shirai91/nx2android) — the porter, the Android host, the NVN→Vulkan replay backend, and the game profiles this project's Linux host runs.
+- [nimrc/nx2linux](https://github.com/nimrc/nx2linux) — the Linux host this project mirrors: dma-buf zero-copy pools, guest memory below 2³⁹, `CPU_NO_ACCESS` copies, FFmpeg movie decode.
+- [seedds/nxnative](https://github.com/seedds/nxnative) (MIT) — the iOS/Mac original; dirty-page tracking and several host HLE services originate there.
+- [Sheepheerd/nxasahi](https://github.com/Sheepheerd/nxasahi) (MIT) — Asahi-Linux work; its library-applet focus handling and gameplay-recording stub are carried over here.
+
 ## License
 
-MIT, as nxnative (see `nxnative/LICENSE`). Third-party code keeps its own license.
+As the underlying projects: MIT where stated (see `nxnative/LICENSE` in the upstream tree). Third-party code keeps its own license.

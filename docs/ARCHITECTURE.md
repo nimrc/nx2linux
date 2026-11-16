@@ -1,6 +1,6 @@
 # Architecture
 
-nx2android turns a player's own Switch game files into an Android app. The player picks the game's folder, clicks **Port**, and gets an APK plus the game's data, which the tool can install on a connected device. Every game the tool supports is a **game profile**; everything all games share is the **core**.
+This project turns a player's own Switch game files into a native Linux port (and the upstream porter into an Android app). The player picks the game's folder, clicks **Port**, and gets the port plus the game's data. Every game the tool supports is a **game profile**; everything all games share is the **core**.
 
 ```
 gui/  (PySide6 desktop app)
