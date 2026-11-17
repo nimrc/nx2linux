@@ -309,7 +309,12 @@ static void env_file(const char *path) {   // KEY=VALUE per line (# comments), a
     while (fgets(line, sizeof line, f)) {
         char *e = line + strlen(line); while (e > line && (e[-1] == '\n' || e[-1] == '\r' || e[-1] == ' ')) *--e = 0;
         if (!line[0] || line[0] == '#') continue;
-        char *eq = strchr(line, '='); if (!eq) continue; *eq = 0; setenv(line, eq + 1, 1);
+        char *eq = strchr(line, '='); if (!eq) continue; *eq = 0;
+        // porter writes the Android app's files folder (/sdcard/Android/data/<package>/files, datapack.files_folder): it is the data dir here
+        const char *v = eq + 1, *pre = "/sdcard/Android/data/", *rest;
+        if (!strncmp(v, pre, strlen(pre)) && (rest = strchr(v + strlen(pre), '/')) && !strncmp(rest, "/files", 6) && (!rest[6] || rest[6] == '/')) {
+            char p[PATH_MAX + 1024]; snprintf(p, sizeof p, "%s%s", g_root, rest + 6); setenv(line, p, 1);
+        } else setenv(line, v, 1);
     }
     fclose(f);
 }
@@ -331,8 +336,6 @@ int main(int argc, char **argv) {
     snprintf(p, sizeof p, "%s/temp", g_root); mkdir(p, 0700); setenv("DM_TEMP", p, 0);
     snprintf(p, sizeof p, "%s/shaders.dmsv", g_root); setenv("DM_VK_SHADERS", p, 0);
     snprintf(p, sizeof p, "%s/env.txt", g_root); env_file(p);
-    // porter writes the Android app's path for the button-icon font: the pack's own copy here
-    { const char *f = getenv("DM_SHARED_FONT_EXT"); if (f && access(f, R_OK)) { snprintf(p, sizeof p, "%s/nintendo_ext.ttf", g_root); setenv("DM_SHARED_FONT_EXT", p, 1); } }
 #ifdef DM_RELEASE
     unsetenv("DM_CTL");
 #endif
